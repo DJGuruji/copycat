@@ -18,6 +18,7 @@
   --nav-bg-hover: #F1E5D2;
   --nav-text: #FFFFFF;
   --nav-text-active: #FFFFFF;
+  --nav-hover-text: #6E2140;
 
   --accent: #6E2140;
   --accent-soft: #F1DCE2;
@@ -34,6 +35,41 @@
 
   --radius: 10px;
   --shadow-card: 0 1px 2px rgba(60, 30, 20, 0.05);
+}
+
+html[data-theme="dark"] {
+  --bg: #0B1220;
+  --surface: #121A2B;
+  --surface-2: #1A2438;
+
+  --border: #2C3D58;
+  --border-soft: #24344C;
+
+  --text: #E7EEF8;
+  --text-muted: #9AABC4;
+  --text-faint: #6E819C;
+
+  --nav-bg: #070E1A;
+  --nav-bg-hover: #17304C;
+  --nav-text: #F4F7FB;
+  --nav-text-active: #F4F7FB;
+  --nav-hover-text: #E8F2FF;
+
+  --accent: #3D78F2;
+  --accent-soft: #1A2E4A;
+  --accent-hover: #6AA3FF;
+
+  --positive: #7DCEA0;
+  --positive-soft: #13261C;
+
+  --negative: #E08B8B;
+  --negative-soft: #2C1A1E;
+
+  --warn: #E0B15C;
+  --warn-soft: #2A2316;
+
+  --shadow-card: 0 1px 2px rgba(2, 6, 16, 0.45);
+  color-scheme: dark;
 }
 
 html {
@@ -85,6 +121,10 @@ body {
 
 .overlay {
   background: color-mix(in srgb, var(--text) 28%, transparent);
+}
+
+html[data-theme="dark"] .overlay {
+  background: color-mix(in srgb, #020617 72%, transparent);
 }
 
 .nav-divider {

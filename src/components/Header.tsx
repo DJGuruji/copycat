@@ -8,6 +8,7 @@ import { UserIcon, ArrowRightOnRectangleIcon, KeyIcon, Bars3Icon, TrashIcon, Cod
 import { Dialog } from '@headlessui/react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { ThemeToggle } from '@/components/ThemeProvider';
 
 export default function Header() {
   const { data: session, status } = useSession();
@@ -117,7 +118,8 @@ export default function Header() {
               </div>
             </div>
             
-            <div className="ml-4 flex items-center">
+            <div className="ml-4 flex items-center gap-2">
+              <ThemeToggle />
               {status === 'authenticated' ? (
                 <div className="relative">
                   <button

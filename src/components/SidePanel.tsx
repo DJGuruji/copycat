@@ -124,7 +124,7 @@ export default function SidePanel({
           </div>
           <button
             onClick={() => setIsCreateModalOpen(true)}
-            className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-[8px] bg-surface text-nav hover:bg-nav-hover transition-colors"
+            className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-[8px] bg-surface text-accent hover:bg-nav-hover transition-colors"
             title="Create Project"
           >
             <PlusIcon className="h-[17px] w-[17px] stroke-2" />
@@ -167,7 +167,7 @@ export default function SidePanel({
                 className={`group relative flex items-center rounded-[7px] border border-transparent px-3 py-2 cursor-pointer transition-colors ${
                   isActive
                     ? 'bg-nav text-nav-ink shadow-[inset_3px_0_0_var(--nav-text)]'
-                    : 'text-nav-ink hover:bg-nav-hover hover:text-nav'
+                    : 'text-nav-ink hover:bg-nav-hover hover:text-nav-hover-ink'
                 }`}
                 onClick={() => onTodoClick(todo)}
               >
@@ -207,7 +207,7 @@ export default function SidePanel({
             {filteredTodos.length === 0 && !isLoading && (
               <div className="px-3 py-10 text-center">
                 <div className="inline-flex p-3 rounded-full bg-nav-hover mb-3">
-                  <MagnifyingGlassIcon className="h-[17px] w-[17px] stroke-2 text-nav" />
+                  <MagnifyingGlassIcon className="h-[17px] w-[17px] stroke-2 text-nav-hover-ink" />
                 </div>
                 <p className="text-[13px] font-medium text-nav-ink">
                   {searchQuery ? 'No results found.' : 'No projects yet.'}
@@ -220,7 +220,7 @@ export default function SidePanel({
 
       <div className="mt-auto border-t nav-divider p-4">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-nav-hover text-[12px] font-bold text-nav">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-nav-hover text-[12px] font-bold text-nav-hover-ink">
             {session?.user?.name?.[0]?.toUpperCase() || 'C'}
           </div>
           <div className="min-w-0">
@@ -273,7 +273,7 @@ export default function SidePanel({
                           </Dialog.Title>
                           <button 
                             onClick={() => setIsOpen(false)}
-                            className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-[8px] bg-nav text-nav-ink hover:bg-nav-hover hover:text-nav transition-colors"
+                            className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-[8px] bg-nav text-nav-ink hover:bg-nav-hover hover:text-nav-hover-ink transition-colors"
                           >
                             <XMarkIcon className="h-[17px] w-[17px] stroke-2" />
                           </button>

@@ -19,6 +19,7 @@ module.exports = {
         nav: 'var(--nav-bg)',
         'nav-hover': 'var(--nav-bg-hover)',
         'nav-ink': 'var(--nav-text)',
+        'nav-hover-ink': 'var(--nav-hover-text)',
         accent: 'var(--accent)',
         'accent-soft': 'var(--accent-soft)',
         'accent-hover': 'var(--accent-hover)',

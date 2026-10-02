@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import axios from 'axios';
 import { Turnstile } from '@marsidev/react-turnstile';
+import { useTheme } from '@/components/ThemeProvider';
 
 export default function Register() {
   const router = useRouter();
@@ -15,6 +16,7 @@ export default function Register() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string>('');
+  const { theme } = useTheme();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -146,9 +148,10 @@ export default function Register() {
 
           <div className="flex justify-center pt-2">
             <Turnstile
+              key={theme}
               siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ''}
               onSuccess={(token) => setTurnstileToken(token)}
-              options={{ theme: 'light' }}
+              options={{ theme }}
             />
           </div>
           

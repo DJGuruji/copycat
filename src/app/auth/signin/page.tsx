@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Turnstile } from '@marsidev/react-turnstile';
 import { toast } from 'react-hot-toast';
+import { useTheme } from '@/components/ThemeProvider';
 
 function SignInForm() {
   const router = useRouter();
@@ -16,6 +17,7 @@ function SignInForm() {
   const [turnstileToken, setTurnstileToken] = useState<string>('');
   const [success, setSuccess] = useState('');
   const searchParams = useSearchParams();
+  const { theme } = useTheme();
 
   useEffect(() => {
     const verified = searchParams.get('verified');
@@ -141,9 +143,10 @@ function SignInForm() {
 
           <div className="flex justify-center pt-2">
             <Turnstile
+              key={theme}
               siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ''}
               onSuccess={(token) => setTurnstileToken(token)}
-              options={{ theme: 'light' }}
+              options={{ theme }}
             />
           </div>
           
