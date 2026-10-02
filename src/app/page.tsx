@@ -14,6 +14,8 @@ interface Item {
   _id: string;
   key?: string;
   value?: string;
+  valueType?: 'text' | 'password' | 'number' | 'link';
+  encrypted?: boolean;
   name?: string;
   notes?: string;
   points?: number;
@@ -150,13 +152,13 @@ export default function Home() {
   if (status === 'loading' || status === 'unauthenticated') {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="animate-pulse text-slate-400">Loading...</div>
+        <div className="animate-pulse text-[13px] text-mute">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-black shadow-lg">
+    <div className="flex h-screen overflow-hidden bg-canvas">
       <div 
         data-aos="fade-right" 
         data-aos-duration="800"
@@ -177,6 +179,7 @@ export default function Home() {
           isOpen={isSidePanelOpen}
           setIsOpen={setIsSidePanelOpen}
           isLoading={isLoading}
+          selectedId={selectedTodo?._id}
         />
       </div>
       <div 
@@ -189,21 +192,21 @@ export default function Home() {
         {selectedTodo ? (
           <TodoDetail todo={selectedTodo} onUpdateTodo={handleUpdateTodo} />
         ) : (
-          <div className="flex flex-col items-center justify-center h-full text-[#a1a1aa] p-8">
+          <div className="flex flex-col items-center justify-center h-full text-mute px-7 py-6">
             <div 
-              className="max-w-md text-center p-12 rounded-2xl bg-[#09090b] shadow-2xl border border-[#27272a]"
+              className="max-w-md text-center p-8 rounded-[10px] bg-surface shadow-card border border-line"
               data-aos="zoom-in"
               data-aos-delay="400"
             >
-              <div className="w-20 h-20 mx-auto mb-8 flex items-center justify-center rounded-full bg-[#18181b] border border-[#27272a]">
+              <div className="w-16 h-16 mx-auto mb-6 flex items-center justify-center rounded-full bg-surface-2 border border-line-soft">
                 <img 
                   src="/window.svg" 
                   alt="Todo" 
-                  className="w-10 h-10 opacity-40 invert"
+                  className="w-8 h-8 opacity-60"
                 />
               </div>
-              <h2 className="text-2xl font-bold tracking-tight text-[#fafafa] mb-3">No Project Selected</h2>
-              <p className="text-sm leading-relaxed text-[#52525b]">
+              <h2 className="text-[21px] font-bold tracking-[-0.02em] text-ink mb-2">No Project Selected</h2>
+              <p className="text-[13px] leading-relaxed text-mute">
                 {todos.length > 0 
                   ? 'Select a project from the sidebar or create a new one to begin managing your tasks.'
                   : 'Start by creating your first project from the sidebar to organize your workflow.'}
@@ -215,7 +218,7 @@ export default function Home() {
       <Toaster 
         position="bottom-right" 
         toastOptions={{
-          className: '!bg-[#18181b] !text-[#fafafa] !border !border-[#27272a] !rounded-lg !text-sm',
+          className: '!bg-surface !text-ink !border !border-line !rounded-[10px] !text-[13px] !shadow-card',
           duration: 3000,
         }}
       />

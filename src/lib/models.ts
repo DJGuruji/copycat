@@ -66,6 +66,15 @@ const ItemSchema = new mongoose.Schema({
   _id: { type: mongoose.Schema.Types.ObjectId, auto: true },
   key: String,
   value: String,
+  valueType: {
+    type: String,
+    enum: ['text', 'password', 'number', 'link'],
+    default: 'text',
+  },
+  encrypted: {
+    type: Boolean,
+    default: true,
+  },
   name: String,
   notes: String,
   points: Number,
@@ -97,6 +106,17 @@ const TodoSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 });
+
+// Next.js can keep a previously compiled model. Drop it when new item fields are missing
+// so valueType and encrypted are not stripped on save.
+const cachedTodo = mongoose.models.Todo;
+const cachedItemsPath = cachedTodo?.schema.path('items') as { schema?: { path: (key: string) => unknown } } | undefined;
+if (cachedTodo && !cachedItemsPath?.schema?.path('valueType')) {
+  mongoose.deleteModel('Todo');
+}
+if (mongoose.models.Item && !mongoose.models.Item.schema.path('valueType')) {
+  mongoose.deleteModel('Item');
+}
 
 export const User = mongoose.models.User || mongoose.model('User', UserSchema);
 export const Todo = mongoose.models.Todo || mongoose.model('Todo', TodoSchema);

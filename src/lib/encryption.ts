@@ -16,6 +16,27 @@ export function encrypt(text: string): string {
   return iv.toString('hex') + ':' + encrypted.toString('hex');
 }
 
+const VALUE_TYPES = ['text', 'password', 'number', 'link'] as const;
+export type ValueType = (typeof VALUE_TYPES)[number];
+
+export function isValueType(value: unknown): value is ValueType {
+  return typeof value === 'string' && (VALUE_TYPES as readonly string[]).includes(value);
+}
+
+/** Encrypt unless the caller explicitly opted out. Missing flag keeps legacy values encrypted. */
+export function storeItemValue(value: string | undefined, encrypted: boolean | undefined): string {
+  const text = value ?? '';
+  if (encrypted === false) return text;
+  return encrypt(text);
+}
+
+/** Decrypt unless the value was stored in plaintext. */
+export function readItemValue(value: string | undefined, encrypted: boolean | undefined): string {
+  const text = value ?? '';
+  if (encrypted === false) return text;
+  return decrypt(text);
+}
+
 export function decrypt(text: string): string {
   if (!text || !text.includes(':')) return text;
   

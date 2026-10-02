@@ -3,7 +3,18 @@ import { getServerSession } from 'next-auth/next';
 import connectDB from '@/lib/db';
 import { Todo } from '@/lib/models';
 import { authOptions } from '@/lib/auth';
-import { encrypt, decrypt } from '@/lib/encryption';
+import { isValueType, readItemValue, storeItemValue } from '@/lib/encryption';
+
+function presentItem(item: any) {
+  const obj = item.toObject ? item.toObject() : item;
+  const encrypted = obj.encrypted !== false;
+  return {
+    ...obj,
+    value: readItemValue(obj.value, encrypted),
+    encrypted,
+    valueType: isValueType(obj.valueType) ? obj.valueType : 'text',
+  };
+}
 
 // GET a single todo by ID
 export async function GET(
@@ -30,8 +41,7 @@ export async function GET(
     const processedTodo = {
       ...todo.toObject(),
       items: todo.items.map((item: any) => ({
-        ...item.toObject(),
-        value: decrypt(item.value || ''),
+        ...presentItem(item),
         targetDate: item.targetDate || undefined,
         status: item.status || 'ETS'
       }))
@@ -63,9 +73,11 @@ export async function PUT(
       data.items = data.items.map((item: any) => {
         const processedItem = { ...item };
         
-        // Encrypt value
+        const encrypted = processedItem.encrypted !== false;
+        processedItem.encrypted = encrypted;
+        processedItem.valueType = isValueType(processedItem.valueType) ? processedItem.valueType : 'text';
         if (processedItem.value !== undefined) {
-          processedItem.value = encrypt(processedItem.value || '');
+          processedItem.value = storeItemValue(processedItem.value, encrypted);
         }
 
         if (processedItem._id && processedItem._id.startsWith('temp_')) {
@@ -111,10 +123,7 @@ export async function PUT(
     // Decrypt before returning
     const responseTodo = {
       ...todo.toObject(),
-      items: todo.items.map((item: any) => ({
-        ...item.toObject(),
-        value: decrypt(item.value || '')
-      }))
+      items: todo.items.map((item: any) => presentItem(item))
     };
 
     return NextResponse.json(responseTodo);

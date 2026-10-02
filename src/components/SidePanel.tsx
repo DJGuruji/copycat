@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useSession } from 'next-auth/react';
 import { Dialog, Transition } from '@headlessui/react';
 import { XMarkIcon, ExclamationTriangleIcon, PencilIcon, TrashIcon, PlusIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { Fragment } from 'react';
@@ -34,6 +35,7 @@ interface SidePanelProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   isLoading?: boolean;
+  selectedId?: string;
 }
 
 export default function SidePanel({
@@ -46,7 +48,9 @@ export default function SidePanel({
   isOpen,
   setIsOpen,
   isLoading = false,
+  selectedId,
 }: SidePanelProps) {
+  const { data: session } = useSession();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [newTodoTitle, setNewTodoTitle] = useState('');
   const [newTodoTargetDate, setNewTodoTargetDate] = useState('');
@@ -109,104 +113,125 @@ export default function SidePanel({
   );
 
   const panel = (
-    <div className="flex h-full flex-col bg-[#09090b] border-r border-[#27272a]">
-      <div className="p-6 border-b border-[#27272a]">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold tracking-tighter">
-            <span className="bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent">
+    <div className="flex h-full flex-col bg-nav text-nav-ink">
+      <div className="p-4 border-b nav-divider">
+        <div className="flex items-center justify-between mb-4">
+          <div>
+            <p className="text-[11px] font-semibold text-nav-ink">Workspace</p>
+            <h2 className="text-[14.5px] font-bold tracking-[-0.02em] text-nav-ink">
               Projects
-            </span>
-          </h2>
+            </h2>
+          </div>
           <button
             onClick={() => setIsCreateModalOpen(true)}
-            className="inline-flex items-center justify-center rounded-lg bg-gradient-to-r from-yellow-400 to-amber-500 p-2 text-[#09090b] hover:opacity-90 transition-all shadow-[0_0_15px_rgba(251,191,36,0.2)] hover:scale-110 active:scale-95"
+            className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-[8px] bg-surface text-nav hover:bg-nav-hover transition-colors"
             title="Create Project"
           >
-            <PlusIcon className="h-5 w-5" />
+            <PlusIcon className="h-[17px] w-[17px] stroke-2" />
           </button>
         </div>
         
-        <div className="relative group">
-          <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#a1a1aa] group-focus-within:text-yellow-500 transition-colors" />
+        <div className="relative">
+          <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-[17px] w-[17px] stroke-2 text-faint" />
           <input
             type="text"
             placeholder="Search projects..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 bg-[#18181b]/30 border border-[#27272a] rounded-xl text-sm text-[#fafafa] placeholder:text-[#52525b] focus:outline-none focus:ring-1 focus:ring-yellow-500/50 transition-all"
+            className="w-full pl-9 pr-8 py-2 bg-surface border border-line rounded-[8px] text-[13px] text-ink placeholder:text-faint focus:outline-none focus:ring-1 focus:ring-accent focus:border-accent transition-colors"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#a1a1aa] hover:text-[#fafafa] transition-colors"
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-faint hover:text-ink transition-colors"
             >
-              <XMarkIcon className="h-4 w-4" />
+              <XMarkIcon className="h-4 w-4 stroke-2" />
             </button>
           )}
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto custom-scrollbar p-3">
+      <div className="flex-1 overflow-y-auto p-3">
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center h-40 space-y-4">
-            <div className="relative">
-              <div className="w-8 h-8 border-2 border-yellow-500/20 border-t-yellow-500 rounded-full animate-spin" />
-              <div className="absolute inset-0 w-8 h-8 border-2 border-transparent border-b-amber-300 rounded-full animate-spin-slow" />
-            </div>
-            <p className="text-xs font-medium text-[#a1a1aa] tracking-widest uppercase">Loading...</p>
+          <div className="flex flex-col items-center justify-center h-40 space-y-3">
+            <div className="w-7 h-7 border-2 border-nav-hover border-t-nav-ink rounded-full animate-spin" />
+            <p className="text-[12px] font-medium text-nav-ink">Loading...</p>
           </div>
         ) : (
-          <div className="space-y-1.5">
-            {filteredTodos.map((todo) => (
+          <div className="space-y-1">
+            {filteredTodos.map((todo) => {
+              const isActive = selectedId === todo._id;
+              return (
               <div 
                 key={todo._id} 
-                className="group relative flex items-center rounded-xl hover:bg-[#18181b] border border-transparent hover:border-[#27272a] transition-all px-4 py-3 cursor-pointer"
+                className={`group relative flex items-center rounded-[7px] border border-transparent px-3 py-2 cursor-pointer transition-colors ${
+                  isActive
+                    ? 'bg-nav text-nav-ink shadow-[inset_3px_0_0_var(--nav-text)]'
+                    : 'text-nav-ink hover:bg-nav-hover hover:text-nav'
+                }`}
                 onClick={() => onTodoClick(todo)}
               >
                 <div className="flex-1 min-w-0 mr-2">
-                  <h3 className="text-sm font-semibold text-[#fafafa] group-hover:text-yellow-400 transition-colors truncate">
+                  <h3 className="text-[13.5px] font-semibold truncate">
                     {todo.title}
                   </h3>
-                  <p className="text-[10px] font-medium text-[#a1a1aa] mt-0.5 uppercase tracking-wider">
+                  <p className="font-mono text-[11.5px] mt-0.5 opacity-80">
                     {new Date(todo.createdAt).toLocaleDateString()}
                   </p>
                 </div>
                 
-                <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-all duration-200">
+                <div className="flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       handleEditClick(todo);
                     }}
-                    className="p-1.5 text-[#a1a1aa] hover:text-blue-400 hover:bg-blue-400/10 rounded-md transition-all"
+                    className="p-1.5 rounded-[6px] text-current hover:bg-surface transition-colors"
                   >
-                    <PencilIcon className="h-3.5 w-3.5" />
+                    <PencilIcon className="h-[17px] w-[17px] stroke-2" />
                   </button>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       handleDeleteClick(todo._id);
                     }}
-                    className="p-1.5 text-[#a1a1aa] hover:text-red-500 hover:bg-red-500/10 rounded-md transition-all"
+                    className="p-1.5 rounded-[6px] text-current hover:bg-negative-soft hover:text-negative transition-colors"
                   >
-                    <TrashIcon className="h-3.5 w-3.5" />
+                    <TrashIcon className="h-[17px] w-[17px] stroke-2" />
                   </button>
                 </div>
               </div>
-            ))}
+              );
+            })}
             
             {filteredTodos.length === 0 && !isLoading && (
-              <div className="px-4 py-12 text-center">
-                <div className="inline-flex p-3 rounded-full bg-[#18181b] border border-[#27272a] mb-3">
-                  <MagnifyingGlassIcon className="h-5 w-5 text-[#52525b]" />
+              <div className="px-3 py-10 text-center">
+                <div className="inline-flex p-3 rounded-full bg-nav-hover mb-3">
+                  <MagnifyingGlassIcon className="h-[17px] w-[17px] stroke-2 text-nav" />
                 </div>
-                <p className="text-sm font-medium text-[#a1a1aa]">
+                <p className="text-[13px] font-medium text-nav-ink">
                   {searchQuery ? 'No results found.' : 'No projects yet.'}
                 </p>
               </div>
             )}
           </div>
         )}
+      </div>
+
+      <div className="mt-auto border-t nav-divider p-4">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-nav-hover text-[12px] font-bold text-nav">
+            {session?.user?.name?.[0]?.toUpperCase() || 'C'}
+          </div>
+          <div className="min-w-0">
+            <p className="truncate text-[13px] font-semibold text-nav-ink">
+              {session?.user?.name || 'CopyCat'}
+            </p>
+            <p className="truncate text-[11.5px] text-nav-ink opacity-80">
+              {session?.user?.email || 'Workspace'}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -225,7 +250,7 @@ export default function SidePanel({
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <div className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity" />
+              <div className="overlay fixed inset-0 transition-opacity" />
             </Transition.Child>
 
             <div className="fixed inset-0 overflow-hidden">
@@ -240,17 +265,17 @@ export default function SidePanel({
                     leaveFrom="translate-x-0"
                     leaveTo="-translate-x-full"
                   >
-                    <Dialog.Panel className="pointer-events-auto w-screen max-w-xs">
-                      <div className="flex h-full flex-col bg-[#09090b]">
-                        <div className="flex items-center justify-between p-4 border-b border-[#27272a]">
-                          <Dialog.Title className="text-sm font-semibold text-[#fafafa] uppercase tracking-wider">
+                    <Dialog.Panel className="pointer-events-auto w-[232px]">
+                      <div className="flex h-full flex-col bg-nav">
+                        <div className="flex items-center justify-between p-4 border-b nav-divider">
+                          <Dialog.Title className="text-[13px] font-semibold text-nav-ink">
                             Menu
                           </Dialog.Title>
                           <button 
                             onClick={() => setIsOpen(false)}
-                            className="p-2 text-[#a1a1aa] hover:text-[#fafafa] transition-colors"
+                            className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-[8px] bg-nav text-nav-ink hover:bg-nav-hover hover:text-nav transition-colors"
                           >
-                            <XMarkIcon className="h-5 w-5" />
+                            <XMarkIcon className="h-[17px] w-[17px] stroke-2" />
                           </button>
                         </div>
                         <div className="flex-1 overflow-y-auto">
@@ -296,7 +321,7 @@ export default function SidePanel({
 
   return (
     <>
-      <div className="w-80 h-full flex flex-col">{panel}</div>
+      <div className="w-[232px] h-full flex flex-col">{panel}</div>
       
       <CreateTodoModal 
         isOpen={isCreateModalOpen}
@@ -354,7 +379,7 @@ function CreateTodoModal({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" />
+          <div className="overlay fixed inset-0" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -368,23 +393,23 @@ function CreateTodoModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md bg-[#09090b] rounded-xl p-8 border border-[#27272a] shadow-2xl">
+              <Dialog.Panel className="w-full max-w-md bg-surface rounded-[10px] p-6 border border-line shadow-card">
                 <div className="mb-6">
-                  <Dialog.Title as="h3" className="text-2xl font-semibold tracking-tight text-[#fafafa]">
+                  <Dialog.Title as="h3" className="text-[21px] font-bold tracking-[-0.02em] text-ink">
                     Create New Project
                   </Dialog.Title>
-                  <p className="text-sm text-[#a1a1aa] mt-1">Organize your items into projects</p>
+                  <p className="text-[13px] text-mute mt-1">Organize your items into projects</p>
                 </div>
                 
                 <form onSubmit={onSubmit} className="space-y-4">
                   <div className="space-y-2">
-                    <label htmlFor="todoTitle" className="text-sm font-medium leading-none text-[#fafafa]">
+                    <label htmlFor="todoTitle" className="text-[12.5px] font-semibold leading-none text-ink">
                        Project Name
                     </label>
                     <input
                       type="text"
                       id="todoTitle"
-                      className="flex h-10 w-full rounded-md border border-[#27272a] bg-transparent px-3 py-2 text-sm placeholder:text-[#52525b] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#fafafa]"
+                      className="flex h-10 w-full rounded-[8px] border border-line bg-surface px-3 py-2 text-[13px] text-ink placeholder:text-faint focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent focus-visible:border-accent"
                       placeholder="e.g. Work Assets, Personal Clips"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
@@ -396,14 +421,14 @@ function CreateTodoModal({
                   <div className="flex justify-end space-x-3 pt-6">
                     <button
                       type="button"
-                      className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-[#27272a] bg-transparent hover:bg-[#27272a] h-10 px-4 py-2"
+                      className="inline-flex items-center justify-center rounded-[8px] text-[13px] font-semibold transition-colors border border-line bg-surface text-ink hover:bg-surface-2 h-10 px-4 py-2"
                       onClick={() => setIsOpen(false)}
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="inline-flex items-center justify-center rounded-md text-sm font-medium bg-[#fafafa] text-[#09090b] hover:bg-[#fafafa]/90 h-10 px-4 py-2"
+                      className="inline-flex items-center justify-center rounded-[8px] text-[13px] font-semibold bg-accent text-nav-ink hover:bg-accent-hover h-10 px-4 py-2"
                     >
                       Create
                     </button>
@@ -445,7 +470,7 @@ function EditTodoModal({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" />
+          <div className="overlay fixed inset-0" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -459,23 +484,23 @@ function EditTodoModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md bg-[#09090b] rounded-xl p-8 border border-[#27272a] shadow-2xl text-left">
+              <Dialog.Panel className="w-full max-w-md bg-surface rounded-[10px] p-6 border border-line shadow-card text-left">
                 <div className="mb-6">
-                  <Dialog.Title as="h3" className="text-2xl font-semibold tracking-tight text-[#fafafa]">
+                  <Dialog.Title as="h3" className="text-[21px] font-bold tracking-[-0.02em] text-ink">
                     Edit Project
                   </Dialog.Title>
-                  <p className="text-sm text-[#a1a1aa] mt-1">Make changes to your project details</p>
+                  <p className="text-[13px] text-mute mt-1">Make changes to your project details</p>
                 </div>
                 
                 <form onSubmit={onSubmit} className="space-y-4">
                   <div className="space-y-2">
-                    <label htmlFor="editTodoTitle" className="text-sm font-medium leading-none text-[#fafafa]">
+                    <label htmlFor="editTodoTitle" className="text-[12.5px] font-semibold leading-none text-ink">
                       Project Name
                     </label>
                     <input
                       type="text"
                       id="editTodoTitle"
-                      className="flex h-10 w-full rounded-md border border-[#27272a] bg-transparent px-3 py-2 text-sm placeholder:text-[#52525b] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#fafafa]"
+                      className="flex h-10 w-full rounded-[8px] border border-line bg-surface px-3 py-2 text-[13px] text-ink placeholder:text-faint focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-accent focus-visible:border-accent"
                       placeholder="Enter project name"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
@@ -487,14 +512,14 @@ function EditTodoModal({
                   <div className="flex justify-end space-x-3 pt-6">
                     <button
                       type="button"
-                      className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-[#27272a] bg-transparent hover:bg-[#27272a] h-10 px-4 py-2"
+                      className="inline-flex items-center justify-center rounded-[8px] text-[13px] font-semibold transition-colors border border-line bg-surface text-ink hover:bg-surface-2 h-10 px-4 py-2"
                       onClick={() => setIsOpen(false)}
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="inline-flex items-center justify-center rounded-md text-sm font-medium bg-[#fafafa] text-[#09090b] hover:bg-[#fafafa]/90 h-10 px-4 py-2"
+                      className="inline-flex items-center justify-center rounded-[8px] text-[13px] font-semibold bg-accent text-nav-ink hover:bg-accent-hover h-10 px-4 py-2"
                     >
                       Save Changes
                     </button>
@@ -530,7 +555,7 @@ function DeleteConfirmationModal({
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" />
+          <div className="overlay fixed inset-0" />
         </Transition.Child>
 
         <div className="fixed inset-0 overflow-y-auto">
@@ -544,34 +569,34 @@ function DeleteConfirmationModal({
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md bg-[#09090b] rounded-xl p-8 border border-[#27272a] shadow-2xl text-left">
+              <Dialog.Panel className="w-full max-w-md bg-surface rounded-[10px] p-6 border border-line shadow-card text-left">
                 <div className="flex items-center gap-4 mb-6">
-                  <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-500/10">
-                    <ExclamationTriangleIcon className="h-6 w-6 text-red-500" aria-hidden="true" />
+                  <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-negative-soft">
+                    <ExclamationTriangleIcon className="h-6 w-6 text-negative stroke-2" aria-hidden="true" />
                   </div>
                   <div>
-                    <Dialog.Title as="h3" className="text-xl font-semibold text-[#fafafa]">
+                    <Dialog.Title as="h3" className="text-[18px] font-bold tracking-[-0.02em] text-ink">
                       Delete Project
                     </Dialog.Title>
-                    <p className="text-sm text-[#a1a1aa] mt-1">This action cannot be undone.</p>
+                    <p className="text-[13px] text-mute mt-1">This action cannot be undone.</p>
                   </div>
                 </div>
                 
-                <p className="text-sm text-[#a1a1aa] mb-8">
+                <p className="text-[13px] text-mute mb-8">
                   Are you sure you want to delete this project? All items inside will be permanently removed.
                 </p>
 
                 <div className="flex justify-end space-x-3">
                   <button
                     type="button"
-                    className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors border border-[#27272a] bg-transparent hover:bg-[#27272a] h-10 px-4 py-2"
+                    className="inline-flex items-center justify-center rounded-[8px] text-[13px] font-semibold transition-colors border border-line bg-surface text-ink hover:bg-surface-2 h-10 px-4 py-2"
                     onClick={() => setIsOpen(false)}
                   >
                     Cancel
                   </button>
                   <button
                     type="button"
-                    className="inline-flex items-center justify-center rounded-md text-sm font-medium bg-red-500 text-white hover:bg-red-600 h-10 px-4 py-2 transition-colors"
+                    className="inline-flex items-center justify-center rounded-[8px] text-[13px] font-semibold bg-negative text-nav-ink hover:opacity-90 h-10 px-4 py-2 transition-opacity"
                     onClick={onConfirm}
                   >
                     Delete Project

@@ -3,48 +3,70 @@
 @tailwind utilities;
 
 :root {
-  --background: #09090b;
-  --foreground: #fafafa;
-  --card: #09090b;
-  --card-foreground: #fafafa;
-  --primary: #fafafa;
-  --primary-foreground: #09090b;
-  --secondary: #27272a;
-  --secondary-foreground: #a1a1aa;
-  --muted: #18181b;
-  --muted-foreground: #a1a1aa;
-  --accent: #27272a;
-  --accent-foreground: #fafafa;
-  --destructive: #ef4444;
-  --destructive-foreground: #fafafa;
-  --border: #27272a;
-  --input: #27272a;
-  --ring: #fafafa;
+  --bg: #F7EFE2;
+  --surface: #FFFBF3;
+  --surface-2: #F1E5D2;
+
+  --border: #E2D2B8;
+  --border-soft: #ECDFC7;
+
+  --text: #2C201C;
+  --text-muted: #71594F;
+  --text-faint: #A18E7C;
+
+  --nav-bg: #6E2140;
+  --nav-bg-hover: #F1E5D2;
+  --nav-text: #FFFFFF;
+  --nav-text-active: #FFFFFF;
+
+  --accent: #6E2140;
+  --accent-soft: #F1DCE2;
+  --accent-hover: #54172F;
+
+  --positive: #4C6E45;
+  --positive-soft: #E7EEDF;
+
+  --negative: #A93A3A;
+  --negative-soft: #F5DED9;
+
+  --warn: #A5722A;
+  --warn-soft: #F3E4C9;
+
+  --radius: 10px;
+  --shadow-card: 0 1px 2px rgba(60, 30, 20, 0.05);
+}
+
+html {
+  color-scheme: light;
 }
 
 body {
-  background-color: #000000;
-  color: var(--foreground);
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--font-inter), Inter, sans-serif;
   font-feature-settings: "rlig" 1, "calt" 1;
 }
 
-/* Custom scrollbar for dark theme */
+::placeholder {
+  color: var(--text-faint);
+}
+
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #000000;
+  background: var(--bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #27272a;
+  background: var(--border);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46;
+  background: var(--text-faint);
 }
 
 @keyframes slideInRight {
@@ -59,4 +81,12 @@ body {
 
 .animate-slide-in-right {
   animation: slideInRight 0.3s ease-out;
+}
+
+.overlay {
+  background: color-mix(in srgb, var(--text) 28%, transparent);
+}
+
+.nav-divider {
+  border-color: color-mix(in srgb, var(--nav-text) 18%, transparent);
 }

@@ -1,24 +1,25 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { IBM_Plex_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import "aos/dist/aos.css"; // AOS styles
 import AOSInitializer from "@/components/AOSInitializer";
 import AuthProvider from "@/components/AuthProvider";
 import Header from "@/components/Header";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const ibmPlexMono = IBM_Plex_Mono({
+  variable: "--font-ibm-plex-mono",
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
-  title: "Todo App",
-  description: "A modern dark-themed todo application",
+  title: "CopyCat",
+  description: "A light workspace for projects and saved values",
 };
 
 export default function RootLayout({
@@ -27,9 +28,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gradient-to-br from-black min-h-screen text-yellow-400`}
+        className={`${inter.variable} ${ibmPlexMono.variable} font-sans antialiased min-h-screen bg-canvas text-ink`}
       >
         <AuthProvider>
           <AOSInitializer>
