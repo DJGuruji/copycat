@@ -4,7 +4,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import axios from 'axios';
 import { Turnstile } from '@marsidev/react-turnstile';
-import { useTheme } from '@/components/ThemeProvider';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
@@ -12,7 +11,6 @@ export default function ForgotPassword() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState<string>('');
-  const { theme } = useTheme();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,7 +45,7 @@ export default function ForgotPassword() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-canvas text-ink p-4">
       <div className="mb-8 flex flex-col items-center">
-        <Link href="/" className="text-[21px] font-bold tracking-[-0.02em] text-accent">
+        <Link href="/" className="font-display text-[22px] font-medium text-accent">
           CopyCat
         </Link>
         <p className="mt-2 text-[13px] text-mute">Reset your password</p>
@@ -55,7 +53,7 @@ export default function ForgotPassword() {
 
       <div className="w-full max-w-[400px] space-y-6 rounded-[10px] border border-line bg-surface p-6 shadow-card">
         <div className="space-y-2 text-center">
-          <h1 className="text-[21px] font-bold tracking-[-0.02em] text-ink">Forgot Password</h1>
+          <h1 className="font-display text-[22px] font-medium text-ink">Forgot Password</h1>
           <p className="text-[13px] text-mute">
             Enter your email to receive a password reset link
           </p>
@@ -91,17 +89,16 @@ export default function ForgotPassword() {
 
           <div className="flex justify-center pt-2">
             <Turnstile
-              key={theme}
               siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ''}
               onSuccess={(token) => setTurnstileToken(token)}
-              options={{ theme }}
+              options={{ theme: 'light' }}
             />
           </div>
           
           <button
             type="submit"
             disabled={loading}
-            className="inline-flex items-center justify-center rounded-[8px] text-[13px] font-semibold bg-accent text-nav-ink hover:bg-accent-hover transition-colors h-10 px-4 py-2 w-full mt-2"
+            className="inline-flex items-center justify-center rounded-[8px] text-[13px] font-semibold bg-accent text-on-brass border border-accent hover:bg-accent-hover hover:border-accent-hover hover:text-nav-hover-ink transition-colors h-10 px-4 py-2 w-full mt-2"
           >
             {loading ? 'Sending...' : 'Send Reset Link'}
           </button>

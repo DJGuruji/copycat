@@ -171,7 +171,7 @@ export default function TodoDetail({ todo, onUpdateTodo }: TodoDetailProps) {
     <div className="px-4 py-4 sm:px-7 sm:py-6 max-w-7xl mx-auto space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
-          <h1 className="text-[21px] font-bold tracking-[-0.02em] text-ink">
+          <h1 className="font-display text-[22px] font-medium text-ink">
             {todo.title}
           </h1>
           <div className="flex items-center space-x-3 text-[12px] font-medium text-mute">
@@ -182,7 +182,7 @@ export default function TodoDetail({ todo, onUpdateTodo }: TodoDetailProps) {
         </div>
         <button
           onClick={handleAddItem}
-          className="inline-flex items-center justify-center rounded-[8px] bg-accent px-4 py-2 text-[13px] font-semibold text-nav-ink hover:bg-accent-hover transition-colors"
+          className="inline-flex items-center justify-center rounded-[8px] bg-accent px-4 py-2 text-[13px] font-semibold text-on-brass border border-accent hover:bg-accent-hover hover:border-accent-hover hover:text-nav-hover-ink transition-colors"
         >
           <PlusIcon className="h-[17px] w-[17px] stroke-2 mr-2" />
           Add Item
@@ -213,14 +213,14 @@ export default function TodoDetail({ todo, onUpdateTodo }: TodoDetailProps) {
           <table className="w-full text-left">
             <thead>
               <tr className="border-y border-line-soft bg-surface-2">
-                <th className="px-4 py-2.5 text-[11.5px] font-semibold text-faint">Key</th>
-                <th className="px-4 py-2.5 text-[11.5px] font-semibold text-faint">Value</th>
-                <th className="px-4 py-2.5 text-right text-[11.5px] font-semibold text-faint">Actions</th>
+                <th className="px-4 py-2.5 text-[11.5px] font-semibold text-mute">Key</th>
+                <th className="px-4 py-2.5 text-[11.5px] font-semibold text-mute">Value</th>
+                <th className="px-4 py-2.5 text-right text-[11.5px] font-semibold text-mute">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-line-soft">
+            <tbody className="divide-y divide-surface-2">
               {filteredItems.map((item) => (
-                <tr key={item._id} className="group hover:bg-surface-2 transition-colors">
+                <tr key={item._id} className="group hover:bg-canvas transition-colors">
                   <td className="px-4 py-3">
                     <div className="flex items-center space-x-2">
                       <span className="text-[13px] font-medium text-ink truncate max-w-[200px]" title={item.key}>
@@ -361,9 +361,9 @@ export default function TodoDetail({ todo, onUpdateTodo }: TodoDetailProps) {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md bg-surface rounded-[10px] p-6 border border-line shadow-card">
+                <Dialog.Panel className="w-full max-w-md bg-surface rounded-[12px] p-6 border border-line shadow-modal">
                   <div className="mb-6">
-                    <Dialog.Title as="h3" className="text-[21px] font-bold tracking-[-0.02em] text-ink">
+                    <Dialog.Title as="h3" className="font-display text-[21px] font-medium text-ink">
                       {isEditing ? 'Edit Item' : 'Add Item'}
                     </Dialog.Title>
                     <p className="text-[13px] text-mute mt-1">
@@ -482,7 +482,7 @@ export default function TodoDetail({ todo, onUpdateTodo }: TodoDetailProps) {
                         type="checkbox"
                         checked={formEncrypted}
                         onChange={(e) => setFormEncrypted(e.target.checked)}
-                        className="h-4 w-4 rounded border-line bg-surface accent-[var(--accent)]"
+                        className="h-4 w-4 rounded border-line bg-surface accent-[var(--brass)]"
                       />
                       Encrypt this value
                     </label>
@@ -490,13 +490,13 @@ export default function TodoDetail({ todo, onUpdateTodo }: TodoDetailProps) {
                       <button
                         type="button"
                         onClick={() => setIsModalOpen(false)}
-                        className="inline-flex items-center justify-center rounded-[8px] text-[13px] font-semibold transition-colors border border-line bg-surface text-ink hover:bg-surface-2 h-10 px-4 py-2"
+                        className="inline-flex items-center justify-center rounded-[8px] text-[13px] font-semibold transition-colors border border-line bg-canvas text-ink-2 hover:bg-surface-2 hover:border-accent h-10 px-4 py-2"
                       >
                         Cancel
                       </button>
                       <button
                         type="submit"
-                        className="inline-flex items-center justify-center rounded-[8px] text-[13px] font-semibold bg-accent text-nav-ink hover:bg-accent-hover h-10 px-4 py-2"
+                        className="inline-flex items-center justify-center rounded-[8px] text-[13px] font-semibold bg-accent text-on-brass border border-accent hover:bg-accent-hover hover:border-accent-hover hover:text-nav-hover-ink h-10 px-4 py-2"
                       >
                         {isEditing ? 'Save Changes' : 'Add Item'}
                       </button>
@@ -534,13 +534,13 @@ export default function TodoDetail({ todo, onUpdateTodo }: TodoDetailProps) {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md bg-surface rounded-[10px] p-6 border border-line shadow-card text-left">
+                <Dialog.Panel className="w-full max-w-md bg-surface rounded-[12px] p-6 border border-line shadow-modal text-left">
                   <div className="flex items-center gap-4 mb-6">
                     <div className="flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-negative-soft">
                       <ExclamationTriangleIcon className="h-6 w-6 text-negative stroke-2" aria-hidden="true" />
                     </div>
                     <div>
-                      <Dialog.Title as="h3" className="text-[18px] font-bold tracking-[-0.02em] text-ink">
+                      <Dialog.Title as="h3" className="font-display text-[19px] font-medium text-ink">
                         Delete Item
                       </Dialog.Title>
                       <p className="text-[13px] text-mute mt-1">This action cannot be undone.</p>
@@ -555,14 +555,14 @@ export default function TodoDetail({ todo, onUpdateTodo }: TodoDetailProps) {
                     <button
                       type="button"
                       onClick={cancelDeleteItem}
-                      className="inline-flex items-center justify-center rounded-[8px] text-[13px] font-semibold transition-colors border border-line bg-surface text-ink hover:bg-surface-2 h-10 px-4 py-2"
+                      className="inline-flex items-center justify-center rounded-[8px] text-[13px] font-semibold transition-colors border border-line bg-canvas text-ink-2 hover:bg-surface-2 hover:border-accent h-10 px-4 py-2"
                     >
                       Cancel
                     </button>
                     <button
                       type="button"
                       onClick={confirmDeleteItem}
-                      className="inline-flex items-center justify-center rounded-[8px] text-[13px] font-semibold bg-negative text-nav-ink hover:opacity-90 h-10 px-4 py-2 transition-opacity"
+                      className="inline-flex items-center justify-center rounded-[8px] text-[13px] font-semibold bg-negative text-on-bad hover:opacity-90 h-10 px-4 py-2 transition-opacity"
                     >
                       Delete
                     </button>

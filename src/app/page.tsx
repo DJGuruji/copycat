@@ -205,7 +205,7 @@ export default function Home() {
                   className="w-8 h-8 opacity-60"
                 />
               </div>
-              <h2 className="text-[21px] font-bold tracking-[-0.02em] text-ink mb-2">No Project Selected</h2>
+              <h2 className="font-display text-[22px] font-medium text-ink mb-2">No Project Selected</h2>
               <p className="text-[13px] leading-relaxed text-mute">
                 {todos.length > 0 
                   ? 'Select a project from the sidebar or create a new one to begin managing your tasks.'

@@ -3,73 +3,58 @@
 @tailwind utilities;
 
 :root {
-  --bg: #F7EFE2;
-  --surface: #FFFBF3;
-  --surface-2: #F1E5D2;
+  /* Core surfaces */
+  --ink: #101C2E;
+  --ink-2: #1D3255;
 
-  --border: #E2D2B8;
-  --border-soft: #ECDFC7;
+  --slate: #57677E;
+  --slate-light: #8896A8;
 
-  --text: #2C201C;
-  --text-muted: #71594F;
-  --text-faint: #A18E7C;
+  --paper: #F5F3EC;
+  --paper-2: #EEEBE0;
+  --card: #FFFFFF;
 
-  --nav-bg: #6E2140;
-  --nav-bg-hover: #F1E5D2;
-  --nav-text: #FFFFFF;
-  --nav-text-active: #FFFFFF;
-  --nav-hover-text: #6E2140;
+  /* Primary accent */
+  --brass: #B8874F;
+  --brass-dark: #8E6636;
 
-  --accent: #6E2140;
-  --accent-soft: #F1DCE2;
-  --accent-hover: #54172F;
+  /* Semantic states */
+  --good: #2E6A47;
+  --good-bg: #E4EFE6;
 
-  --positive: #4C6E45;
-  --positive-soft: #E7EEDF;
+  --warn: #C07E1E;
+  --warn-bg: #FBEFDA;
 
-  --negative: #A93A3A;
-  --negative-soft: #F5DED9;
+  --bad: #AE3A32;
+  --bad-bg: #F7E4E1;
 
-  --warn: #A5722A;
-  --warn-soft: #F3E4C9;
+  /* Borders */
+  --line: #DEDAC9;
 
+  /* Optional compliance accent */
+  --purple: #5B3E96;
+  --purple-bg: #EAE2F5;
+
+  /* Geometry */
   --radius: 10px;
-  --shadow-card: 0 1px 2px rgba(60, 30, 20, 0.05);
-}
+  --radius-small: 7px;
+  --radius-control: 8px;
 
-html[data-theme="dark"] {
-  --bg: #0B1220;
-  --surface: #121A2B;
-  --surface-2: #1A2438;
+  /* Shadows */
+  --shadow-card: 0 1px 2px rgba(16, 28, 46, 0.05);
+  --shadow-modal: 0 12px 32px rgba(16, 28, 46, 0.18);
 
-  --border: #2C3D58;
-  --border-soft: #24344C;
-
-  --text: #E7EEF8;
-  --text-muted: #9AABC4;
-  --text-faint: #6E819C;
-
-  --nav-bg: #070E1A;
-  --nav-bg-hover: #17304C;
-  --nav-text: #F4F7FB;
-  --nav-text-active: #F4F7FB;
-  --nav-hover-text: #E8F2FF;
-
-  --accent: #3D78F2;
-  --accent-soft: #1A2E4A;
-  --accent-hover: #6AA3FF;
-
-  --positive: #7DCEA0;
-  --positive-soft: #13261C;
-
-  --negative: #E08B8B;
-  --negative-soft: #2C1A1E;
-
-  --warn: #E0B15C;
-  --warn-soft: #2A2316;
-
-  --shadow-card: 0 1px 2px rgba(2, 6, 16, 0.45);
-  color-scheme: dark;
+  /* Navy chrome from the sidebar and header spec */
+  --nav-cream: #EDE9DD;
+  --nav-hover-text: #FFFFFF;
+  --nav-hover: #182842;
+  --nav-strong: #233252;
+  --nav-line: #33456A;
+  --header-text: #F7F4EA;
+  --header-muted: #98A4B8;
+  --on-brass: #241704;
+  --on-bad: #FFFFFF;
+  --neutral-bg: #EEECE3;
 }
 
 html {
@@ -77,14 +62,14 @@ html {
 }
 
 body {
-  background-color: var(--bg);
-  color: var(--text);
+  background: var(--paper);
+  color: var(--ink);
   font-family: var(--font-inter), Inter, sans-serif;
   font-feature-settings: "rlig" 1, "calt" 1;
 }
 
 ::placeholder {
-  color: var(--text-faint);
+  color: var(--slate-light);
 }
 
 ::-webkit-scrollbar {
@@ -93,16 +78,24 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg);
+  background: var(--paper);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border);
+  background: var(--line);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-faint);
+  background: var(--slate-light);
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
+  border-color: var(--brass);
+  box-shadow: 0 0 0 2px rgba(184, 135, 79, 0.12);
 }
 
 @keyframes slideInRight {
@@ -120,13 +113,9 @@ body {
 }
 
 .overlay {
-  background: color-mix(in srgb, var(--text) 28%, transparent);
-}
-
-html[data-theme="dark"] .overlay {
-  background: color-mix(in srgb, #020617 72%, transparent);
+  background: rgba(16, 28, 46, 0.55);
 }
 
 .nav-divider {
-  border-color: color-mix(in srgb, var(--nav-text) 18%, transparent);
+  border-color: var(--nav-line);
 }

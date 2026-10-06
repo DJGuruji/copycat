@@ -8,7 +8,6 @@ import { UserIcon, ArrowRightOnRectangleIcon, KeyIcon, Bars3Icon, TrashIcon, Cod
 import { Dialog } from '@headlessui/react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-import { ThemeToggle } from '@/components/ThemeProvider';
 
 export default function Header() {
   const { data: session, status } = useSession();
@@ -98,49 +97,48 @@ export default function Header() {
 
   return (
     <>
-      <header className="bg-canvas border-b border-line-soft sticky top-0 z-40">
+      <header className="bg-nav border-b border-nav-line sticky top-0 z-40">
         <div className="px-4 sm:px-7">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-3">
               {isMainPage && isMobile && !isSidePanelOpen && (
                 <button
                   onClick={handleSidebarToggle}
-                  className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-[8px] bg-surface border border-line text-mute hover:bg-surface-2 transition-colors"
+                  className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-[8px] bg-nav-hover border border-nav-line text-nav-ink hover:bg-nav-strong transition-colors"
                   aria-label="Open sidebar"
                 >
                   <Bars3Icon className="h-[17px] w-[17px] stroke-2" />
                 </button>
               )}
               <div className="flex-shrink-0">
-                <Link href="/" className="text-[18px] font-bold tracking-[-0.02em] text-accent">
+                <Link href="/" className="font-display text-[18px] font-medium text-accent">
                   CopyCat
                 </Link>
               </div>
             </div>
             
             <div className="ml-4 flex items-center gap-2">
-              <ThemeToggle />
               {status === 'authenticated' ? (
                 <div className="relative">
                   <button
                     onClick={() => setIsProfileSidebarOpen(true)}
-                    className="flex items-center space-x-2 bg-surface border border-line py-1.5 px-3 rounded-[8px] hover:bg-surface-2 transition-colors"
+                    className="flex items-center space-x-2 bg-nav-hover border border-nav-line py-1.5 px-3 rounded-[8px] text-nav-ink hover:bg-nav-strong transition-colors"
                   >
-                    <UserIcon className="h-4 w-4 stroke-2 text-mute" />
-                    <span className="text-[13px] font-medium text-ink">{session.user.name}</span>
+                    <UserIcon className="h-4 w-4 stroke-2 text-nav-ink" />
+                    <span className="text-[13px] font-medium text-header-text">{session.user.name}</span>
                   </button>
                 </div>
               ) : (
                 <div className="flex items-center space-x-2">
                   <Link
                     href="/auth/signin"
-                    className="text-[13px] font-medium text-mute hover:text-ink px-3 py-2 rounded-[8px] transition-colors"
+                    className="text-[13px] font-medium text-header-muted hover:text-header-text px-3 py-2 rounded-[8px] transition-colors"
                   >
                     Sign In
                   </Link>
                   <Link
                     href="/auth/register"
-                    className="bg-accent text-nav-ink text-[13px] font-semibold px-4 py-2 rounded-[8px] hover:bg-accent-hover transition-colors"
+                    className="bg-accent text-on-brass text-[13px] font-semibold px-4 py-2 rounded-[8px] border border-accent hover:bg-accent-hover hover:border-accent-hover hover:text-nav-hover-ink transition-colors"
                   >
                     Register
                   </Link>
@@ -162,10 +160,10 @@ export default function Header() {
           
           <div className="relative bg-surface w-full max-w-xs h-full p-6 shadow-card border-l border-line animate-slide-in-right">
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-[18px] font-bold tracking-[-0.02em] text-ink">Profile</h2>
+              <h2 className="font-display text-[19px] font-medium text-ink">Profile</h2>
               <button 
                 onClick={() => setIsProfileSidebarOpen(false)}
-                className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-[8px] bg-surface border border-line text-mute hover:bg-surface-2 transition-colors"
+                className="inline-flex h-[34px] w-[34px] items-center justify-center rounded-[8px] bg-canvas border border-line text-mute hover:bg-surface-2 transition-colors"
               >
                 <ArrowRightOnRectangleIcon className="h-[17px] w-[17px] stroke-2 rotate-180" />
               </button>
@@ -173,7 +171,7 @@ export default function Header() {
 
             <div className="space-y-6">
               <div className="flex items-center space-x-3 p-4 bg-surface-2 rounded-[10px] border border-line-soft">
-                <div className="h-10 w-10 rounded-full bg-accent flex items-center justify-center text-nav-ink font-bold">
+                <div className="h-10 w-10 rounded-full bg-accent flex items-center justify-center text-on-brass font-semibold">
                   {session?.user?.name?.[0]?.toUpperCase()}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -242,9 +240,9 @@ export default function Header() {
         <div className="flex items-center justify-center min-h-screen p-4">
           <div className="overlay fixed inset-0" aria-hidden="true" />
 
-          <div className="relative bg-surface rounded-[10px] w-full max-w-md mx-4 p-6 shadow-card border border-line">
+          <div className="relative bg-surface rounded-[12px] w-full max-w-md mx-4 p-6 shadow-modal border border-line">
             <div className="space-y-2 text-center mb-6">
-              <h3 className="text-[21px] font-bold tracking-[-0.02em] text-ink">
+              <h3 className="font-display text-[21px] font-medium text-ink">
                 Change Password
               </h3>
               <p className="text-[13px] text-mute">Ensure your account is using a secure password</p>
@@ -292,14 +290,14 @@ export default function Header() {
                 <button
                   type="button"
                   onClick={() => setIsPasswordModalOpen(false)}
-                  className="inline-flex items-center justify-center rounded-[8px] text-[13px] font-semibold transition-colors border border-line bg-surface text-ink hover:bg-surface-2 h-10 px-4 py-2 disabled:pointer-events-none disabled:opacity-50"
+                  className="inline-flex items-center justify-center rounded-[8px] text-[13px] font-semibold transition-colors border border-line bg-canvas text-ink-2 hover:bg-surface-2 hover:border-accent h-10 px-4 py-2 disabled:pointer-events-none disabled:opacity-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="inline-flex items-center justify-center rounded-[8px] text-[13px] font-semibold bg-accent text-nav-ink hover:bg-accent-hover h-10 px-4 py-2 disabled:pointer-events-none disabled:opacity-50"
+                  className="inline-flex items-center justify-center rounded-[8px] text-[13px] font-semibold bg-accent text-on-brass border border-accent hover:bg-accent-hover hover:border-accent-hover hover:text-nav-hover-ink h-10 px-4 py-2 disabled:pointer-events-none disabled:opacity-50"
                 >
                   {isLoading ? 'Changing...' : 'Change Password'}
                 </button>
@@ -317,13 +315,13 @@ export default function Header() {
         <div className="flex items-center justify-center min-h-screen p-4">
           <div className="overlay fixed inset-0" aria-hidden="true" />
 
-          <div className="relative bg-surface rounded-[10px] w-full max-w-md mx-4 p-6 shadow-card border border-line">
+          <div className="relative bg-surface rounded-[12px] w-full max-w-md mx-4 p-6 shadow-modal border border-line">
             <div className="space-y-4 text-center mb-8">
               <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-negative-soft">
                 <TrashIcon className="h-7 w-7 text-negative stroke-2" />
               </div>
               <div>
-                <h3 className="text-[21px] font-bold tracking-[-0.02em] text-ink">
+                <h3 className="font-display text-[21px] font-medium text-ink">
                   Delete Account
                 </h3>
                 <p className="text-[13px] text-mute mt-2">
@@ -377,7 +375,7 @@ export default function Header() {
                     setIsLoading(false);
                   }
                 }}
-                className="inline-flex items-center justify-center rounded-[8px] text-[13px] font-semibold transition-opacity bg-negative text-nav-ink hover:opacity-90 h-11 px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex items-center justify-center rounded-[8px] text-[13px] font-semibold transition-opacity bg-negative text-on-bad hover:opacity-90 h-11 px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isLoading ? 'Deleting...' : 'Permanently Delete My Account'}
               </button>
